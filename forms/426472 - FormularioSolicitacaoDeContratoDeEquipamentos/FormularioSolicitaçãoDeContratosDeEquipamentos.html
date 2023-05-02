@@ -1,0 +1,1091 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" http-equiv="Content-type" content="text/html, charset=utf-8" />
+    <link rel="stylesheet" href="SolicitacaoDeContratos.css" />
+    <link type="text/css" rel="stylesheet" href="/portal/resources/style-guide/css/fluig-style-guide.min.css" />
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+    <script type="text/javascript" src="/portal/resources/style-guide/js/fluig-style-guide.min.js"
+        charset="utf-8"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/gh/aadel112/googoose@master/jquery.googoose.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+    <script src="ParametosModelosDeContrato.js"></script>
+    <script src="/webdesk/vcXMLRPC.js"></script>
+    <script src="jquery.mask.min.js"></script>
+    <script src="jsPDF.min.js"></script>
+    <script src="html2canvas.min.js"></script>
+    <script src="/style-guide/js/fluig-style-guide-richeditor.min.js"></script>
+    <script src="ParametrosContratoColigadas.js"></script>
+    <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="EnderecoObras.js"></script>
+    <script src="https://cdn.tiny.cloud/1/zfg1i7e9sa9p5cg88nj5nb68w3byqe8oxaz9tn5wc41fqu4w/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-jquery@2/dist/tinymce-jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="fluig-style-guide hide" style="width: fit-content; min-width: 100%">
+        <form name="form" role="form">
+            <span id="hide"></span>
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6">
+                    <label for="obra">Seleciona a obra:</label>
+                    <select name="obra" id="obra" class="form-control">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div id="divSelectOptSolic" class="row">
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block" id="btnContratoModeloCastilho">Contrato Modelo
+                        Castilho</button>
+                    <br>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block" id="btnContratoForaDoModelo">Contrato fora do Modelo</button>
+                    <br>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block" id="btnContratoAditivoRescisao">Aditivos e Rescisões</button>
+                    <br>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block" id="btnDownloadModelos">Download de Modelo</button>
+                    <br>
+                </div>
+            </div>
+            <div id="divListaModelosContrato">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Locação de Equipamento</button>
+                        <br>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Locação de Imóvel</button>
+                        <br>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Prestação de Serviços</button>
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Transporte de Material</button>
+                        <br>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Transporte de Funcionários</button>
+                        <br>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Locação de Container</button>
+                        <br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-block btnModeloContrato">Locação de Sanitários</button>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div id="divCollapse">
+                <!-- Nav tabs -->
+                <ul id="coltabs" class="nav nav-tabs nav-justified nav-pills" role="tablist"
+                    style="padding-bottom: 0px; width: 100%">
+                    <li class="collapse-tab">
+                        <a href="#tabContratoPrincipal" role="tab" id="atabContratoPrincipal" data-toggle="tab"
+                            aria-expanded="true" class="tab">Contrato Principal</a>
+                    </li>
+                    <li class="collapse-tab active">
+                        <a href="#tabEquipamentos" role="tab" id="atabEquipamentos" data-toggle="tab"
+                            aria-expanded="true" class="tab">Equipamentos</a>
+                    </li>
+                    <li class="collapse-tab">
+                        <a href="#tabContrato" role="tab" id="atabContrato" data-toggle="tab" aria-expanded="true"
+                            class="tab">Contrato</a>
+                    </li>
+                    <li class="collapse-tab">
+                        <a href="#tabAssinatura" role="tab" id="atabAssinatura" data-toggle="tab" aria-expanded="true"
+                            class="tab">Assinatura</a>
+                    </li>
+                    <li class="collapse-tab">
+                        <a href="#tabAnexos" role="tab" id="atabAnexos" data-toggle="tab" aria-expanded="true"
+                            class="tab">Anexos</a>
+                    </li>
+                    <li class="collapse-tab">
+                        <a href="#tabCamposRM" role="tab" id="atabCamposRM" data-toggle="tab" aria-expanded="true"
+                            class="tab">Campos RM</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content" style="border: black solid 1px; width: fit-content; min-width: 100%;">
+                    <div class="tab-pane active" id="tabEquipamentos">
+                        <table class="table table-bordered" id="tableEquipamentos">
+                            <thead>
+                                <th>Prefixo</th>
+                                <th>Modelo</th>
+                                <th>Descrição</th>
+                                <th>Placa/Serie</th>
+                                <th>Fabricante</th>
+                                <th>Fornecedor</th>
+                                <th>Valor</th>
+                                <th></th>
+                            </thead>
+                            <tbody id="tbodyEquipamentos"></tbody>
+                        </table>
+                        <table class="table table-bordered" id="tableEquipamentosListaEquipamentos">
+                            <thead>
+                                <th>Prefixo</th>
+                                <th>Modelo</th>
+                                <th>Descrição</th>
+                                <th>Placa/Serie</th>
+                                <th>Fabricante</th>
+                                <th>Fornecedor</th>
+                                <th>Valor Equipamento</th>
+                                <th>Valor Locação</th>
+                            </thead>
+                            <tbody id="tbodyListaEquipamentos"></tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="tabContrato">
+                        <div id="divOpcoesContrato">
+                            <div class="panel panel-primary" style="width: 80%; margin: auto;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Contrato</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-3 divOptLocImovel">
+                                            <label for="" style="width: 100%;">
+                                                Natureza do Locador:
+                                                <select name="selectOptLocImovel" id="selectOptLocImovel"
+                                                    class="form-control">
+                                                    <option value="Pessoa Física">Pessoa Física</option>
+                                                    <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptLocEquipamento">
+                                            <label for="" style="width: 100%;">
+                                                Mão de Obra:
+                                                <select name="selectOptLocEquipamento" id="selectOptLocEquipamento"
+                                                    class="form-control">
+                                                    <option value="Com Mão de Obra">Com Mão de Obra</option>
+                                                    <option value="Sem Mão de Obra">Sem Mão de Obra</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptTransporteMaterial">
+                                            <label for="" style="width: 100%;">
+                                                Valor:
+                                                <select name="selectOptTransporteMaterial"
+                                                    id="selectOptTransporteMaterial" class="form-control">
+                                                    <option value="Valor Fixo">Valor Fixo</option>
+                                                    <option value="Valor por Parâmetro">Valor por Parâmetro</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptPretacaoServicos">
+                                            <label for="" style="width: 100%;">
+                                                Valor:
+                                                <select name="selectOptPretacaoServicos" id="selectOptPretacaoServicos"
+                                                    class="form-control">
+                                                    <option value="Valor Total">Valor Total</option>
+                                                    <option value="Valor Unitário">Valor Unitário</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptPretacaoServicos">
+                                            <label for="" style="width: 100%;">
+                                                GFIP:
+                                                <select name="selectOptPretacaoServicosGFIP"
+                                                    id="selectOptPretacaoServicosGFIP" class="form-control">
+                                                    <option value="Com GFIP">Com GFIP</option>
+                                                    <option value="Sem GFIP">Sem GFIP</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptAditivoLocEquipamentos">
+                                            <label for="" style="width: 100%;">
+                                                <input type="checkbox" name="checkboxOptAcrescentarEqp"
+                                                    id="checkboxOptAcrescentarEqp">
+                                                Acrescentar Equipamentos:
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptAditivoLocEquipamentos">
+                                            <label for="" style="width: 100%;">
+                                                <input type="checkbox" name="checkboxOptRemoverEqp"
+                                                    id="checkboxOptRemoverEqp">
+                                                Remover Equipamentos:
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptAditivoLocImovel">
+                                            <label for="selectOptAditivoLocImovel" style="width: 100%;">
+                                                Reajuste de Valor:
+                                                <select name="selectOptAditivoLocImovel" id="selectOptAditivoLocImovel"
+                                                    class="form-control">
+                                                    <option value="Com reajuste">Com reajuste</option>
+                                                    <option value="Sem reajuste">Sem reajuste</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptAditivoLocImovel">
+                                            <label for="" style="width: 100%;">
+                                                Natureza do Locador:
+                                                <select name="selectOptAditivoNatLocImovel" id="selectOptAditivoNatLocImovel"
+                                                    class="form-control">
+                                                    <option value="Pessoa Física">Pessoa Física</option>
+                                                    <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divOptRescisaoLocImovel">
+                                            <label for="" style="width: 100%;">
+                                                Natureza do Locador:
+                                                <select name="selectOptRescisaoNatLocImovel" id="selectOptRescisaoNatLocImovel"
+                                                    class="form-control">
+                                                    <option value="Pessoa Jurídica">Pessoa Jurídica</option>
+                                                    <option value="Pessoa Física">Pessoa Física</option>
+                                                </select>
+                                            </label>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-3 divSelectREIDI">
+                                            <label for="selectREIDI" style="width: 100%;">
+                                                Cláusula do beníficio REIDI:
+                                            </label>
+                                            <select name="selectREIDI" id="selectREIDI" class="form-control">
+                                                <option value="Não">Não</option>
+                                                <option value="Sim">Sim</option>
+                                            </select>
+                                            <br>
+                                        </div>
+                                        <!--<div id="divSelectTipoContrato" class="col-md-4">
+                                                <label for="selectTipoContrato">Tipo do Contrato: </label>
+                                                <select name="selectTipoContrato" id="selectTipoContrato"
+                                                    class="form-control"
+                                                    style="display: inline-block; padding-right: 30px !important">
+                                                    <optgroup label="Contratos">
+                                                        <option value="Com Mão de Obra">Locação de Equipamento C/M.O.
+                                                        </option>
+                                                        <option value="Sem Mão de Obra">Locação de Equipamento S/M.O.
+                                                        </option>
+                                                        <option value="Transporte de Material">Transporte de Material
+                                                        </option>
+                                                        <option value="Fretes e Carretos">Fretes e Carretos
+                                                        </option>
+                                                    </optgroup>
+                                                    <optgroup label="Aditivos">
+                                                        <option value="Aditivo Locação de Equipamento">Aditivo Locação
+                                                            de Equipamento
+                                                        </option>
+                                                    </optgroup>
+                                                    <option value="Fora do padrão Castilho">Fora do padrão Castilho
+                                                    </option>
+                                                </select>
+                                                <br>
+                                            </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <br /><br />
+                        </div>
+                        <div align="center" id="divHtmlContrato">
+                            <div id="htmlContrato" class="htmlContrato"
+                                style="margin: auto; width: 210mm; text-align: justify;"></div>
+                            <div id="divEditaHtml" style="height: 100vh;">
+                                <textarea name="areaEditarHtml" id="areaEditarHtml"
+                                    style="width: 220mm; height: 100%;"></textarea>
+                            </div>
+                            <br />
+                            <div>
+                                <button class="btn btn-primary" id="btnSalvar">Salvar</button>
+                                <button class="btn btn-primary" id="btnEditar">Editar</button>
+                                <button class="btn btn-primary" id="btnEditarClausulas">Editar Cláusulas</button>
+                                <button class="btn btn-primary" id="btnSalvarClausulas">Salvar</button>
+                                <button class="btn btn-success" id="btnGerarPDF">Gerar PDF</button>
+                                <button class="btn btn-info" id="btnGerarWord">Gerar Word</button>
+                                <br><br>
+                            </div>
+                        </div>
+                        <div class="row" id="divContratoForaPadrao">
+                            <div class="col-md-offset-1 col-md-10">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Contrato Fora do Padrão Castilho</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <!--<div id="ContratoPDF">
+                                            <div class="row">
+                                                <div class="col-md-offset-7 col-md-2">
+                                                    <button onclick='BuscaUrlDoc($("#idDocContrato").val(),true)'
+                                                        class="btn btn-primary"><i
+                                                            class="flaticon flaticon-search-zoom icon-sm"></i></button>
+                                                    <button onclick='BuscaUrlDoc($("#idDocContrato").val(),false)'
+                                                        class="btn btn-primary"><i
+                                                            class="flaticon flaticon-zoom-out icon-sm"></i></button>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                <canvas id="iframeContrato" style="border: 1px solid black;"></canvas>
+                                            </div>
+                                            <br>
+                                            <div>
+                                                <button id="prev" class="btn btn-primary" style="margin-right: 10px"><i
+                                                        class="fluigicon fluigicon-chevron-left icon-sm"></i></button>
+                                                <span>Page: <span id="page_num"></span> / <span
+                                                        id="page_count"></span></span>
+                                                <button id="next" class="btn btn-primary" style="margin-left: 10px"><i
+                                                        class="fluigicon fluigicon-chevron-right icon-sm"></i></button>
+                                            </div>
+                                            <br><br>
+                                        </div>-->
+                                        <div id="avisoContratoAnexado">
+                                            <div style="color:red; border: 2px solid #DC143C; width: fit-content; margin-left: auto; margin-right: auto;"
+                                                align="center">
+                                                * Para anexar ou visualizar o contrato clique na aba "Anexos".
+                                                <br>
+                                                * Para anexar: Clique em "Carregar arquivos".
+                                                <br>
+                                                * Para fazer download do anexo inserido: selecione o anexo e clique em
+                                                "Download".
+                                                <br>
+                                                * Após anexar o contrato clique em "Enviar" para concluir.
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-10 col-md-offset-1" style="text-align: left;">
+                                                <label for="zoomFornecedor">Fornecedor:</label>
+                                                <input class="form-control" type="zoom" id="zoomFornecedor"
+                                                    name="zoomFornecedor" data-zoom="{
+                                                        'displayKey':'CGCCFO',
+                                                        'datasetId':'FCFO',
+                                                        'maximumSelectionLength':'1',
+                                                        'filterValues': 'CODCOLIGADA,0,ATIVO,1,sqllimit,100',
+                                                        'placeholder':'Escolha o fornecedor',
+                                                        'fields':[
+                                                            {'field':'CGCCFO','label':'CPF/CNPJ','search':'true'},
+                                                            {'field':'NOMEFANTASIA','label':'Nome', 'search':'true'},
+                                                            {'field':'CODCFO','label':'Código','search':'true'}
+                                                        ]
+                                                    }" />
+                                                <br><br>
+                                                <div id="divFornecedorSelected">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-3" style="text-align: center;">
+                                                <label for="myFile" style="text-align: left;">
+                                                    Contrato:
+                                                    <br />
+                                                    <div style="display: flex; align-items: baseline">
+                                                        <button class="btn btn-primary" onclick="$('#myFile').click();"
+                                                            style="margin-right: 5px">Escolher arquivo</button>
+                                                        <div
+                                                            style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                            Nenhum arquivo selecionado</div>
+                                                        <input type="file" name="myFile" id="myFile"
+                                                            title="Selecione o contrato" style="display: none" />
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabContratoPrincipal">
+                        <div id="divContratoPrincipal">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Contrato Principal</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped table-bordered compact" id="tableContratoPrincipal" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Número</th>
+                                                <th>Fornecedor</th>
+                                                <th>CNPJ</th>
+                                                <th>Descrição</th>
+                                                <th>Tipo</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divContratoPrincipal2">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Contrato Principal</h3>
+                                </div>
+                                <div class="panel-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabAssinatura">
+                        <div class="panel panel-primary" id="panelOptAssinaturas">
+                            <div class="panel-heading">
+                                <h3>Formas de assinatura</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        Selecione o tipo de assinatura:
+                                        <div style="display: inline-flex; margin-right: 10px">
+                                            <label>Manual: <input type="radio" name="radioOptAssinatura"
+                                                    id="radioOptAssinaturaDigital" value="Manual" /></label>
+                                        </div>
+                                        <div style="display: inline-flex; margin-right: 10px">
+                                            <label>Eletrônica: <input type="radio" name="radioOptAssinatura"
+                                                    id="radioOptAssinaturaEletronica" value="Eletronica" /></label>
+                                        </div>
+                                        <div style="display: inline-flex; margin-right: 10px">
+                                            <label>Já Assinado: <input type="radio" name="radioOptAssinatura"
+                                                    id="radioOptAssinaturaAssinado" value="Assinado" /></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divAssinaturaEletronica" class="container-fluid">
+                                    <br />
+                                    <div id="divAssinaturaRepresentante">
+                                        <h4>Representante:</h4>
+                                        <div id="divSelectAssinaturaRepresentante" class="container-fluid">
+                                            <label>Selecione o representante:</label>
+                                            <select name="selectAssinanteCastilho" id="selectAssinanteCastilho"
+                                                class="form-control" onchange="ValidaTerminoTabAssinatura()">
+                                                <option value=""></option>
+                                                <option value="Augusto Lyra">Augusto Lyra</option>
+                                                <option value="Emanuel Mascarenhas Padilha Junior">Emanuel Mascarenhas
+                                                    Padilha Junior</option>
+                                                <option value="Jerson Godoy Leski Junior">Jerson Godoy Leski Junior
+                                                </option>
+                                                <option value="Servulo Sanches Correa">Servulo Sanches Correa</option>
+                                                <option value="Marcio Rinaldo Guinossi">Marcio Rinaldo Guinossi</option>
+                                            </select>
+                                            <br />
+                                        </div>
+                                        <div id="listRepresentante" class="container-fluid"></div>
+                                        <br />
+                                    </div>
+                                    <h4>Assinantes:</h4>
+                                    <div id="divSelectAssinante" class="container-fluid">
+                                        <label for="selectParteAssinatura">Selecione o assinante:</label>
+                                        <br />
+                                        <div style="display: flex">
+                                            <input type="text" class="form-control" id="selectParteAssinatura"
+                                                name="selectParteAssinatura" />
+                                            <button class="btn btn-success"
+                                                onclick='incluiAssinante($("#selectParteAssinatura").val()); $("#selectParteAssinatura").val(""); ValidaTerminoTabAssinatura();'
+                                                style="vertical-align: top">Incluir assinante</button>
+                                            <button onclick="ModalNovoAssinante();" style="vertical-align: top"
+                                                class="btn btn-primary btnNovoCad">Cadastrar Novo</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div id="divListAssinantes" class="container-fluid"></div>
+                                    <input type="hidden" name="hiddenEmailAssinatura" id="hiddenEmailAssinatura" />
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divLinhaQuadroStatus">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Quadro de status</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>Verificar</th>
+                                                <th>Assinantes</th>
+                                                <th>Data de envio</th>
+                                                <th>Horário de envio</th>
+                                                <th>Enviado por</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyLinhaQuadroStatus"></tbody>
+                                    </table>
+                                    <br />
+                                    <div align="right">
+                                        <button onclick="ModalNovoAssinante()"
+                                            class="btn btn-primary btnNovoCad">Cadastrar Assinante</button>
+                                        <button class="btn btn-primary" onclick="ModalReenviaContrato()">Reenviar
+                                            Contrato</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabAnexos">
+                        <div id="divSelectOptAnexos" class="row">
+                            <div class="col-md-4">
+                                <label for="selectOptAnexos">Selecione a opção de anexos: </label>
+                                <select name="selectOptAnexos" id="selectOptAnexos" class="form-control">
+                                    <option value="Locação de Equipamentos">Locação de Equipamentos</option>
+                                    <option value="Locação de Imóvel - Pessoa Física">Locação de Imóvel - Pessoa Física</option>
+                                    <option value="Locação de Imóvel - Pessoa Jurídica">Locação de Imóvel - Pessoa Jurídica</option>
+                                    <option value="Prestação de Serviço">Prestação de Serviço</option>
+                                    <option value="Transporte de Material">Transporte de Material</option>
+                                    <option value="Transporte de Funcionários">Transporte de Funcionários</option>
+                                    <option value="Locação de Container">Locação de Container</option>
+                                    <option value="Locação de Sanitários">Locação de Sanitários</option>
+                                </select>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="divAnexoRepresentante">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Documentação do Representante</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4" id="divOptAnexoAdministrador">
+                                        <label>
+                                            Documentos do representante:
+                                            <br />
+                                            <select name="DocsAdministrador" id="DocsAdministrador"
+                                                class="form-control">
+                                                <option value="RG e CPF">RG e CPF</option>
+                                                <option value="CNH">CNH</option>
+                                            </select>
+                                        </label>
+                                        <br>
+                                    </div>
+                                    </div>
+                                    <div class='row'>
+                                    <div class="col-md-4" id="divAnexoCNH">
+                                        <label for="inputFileCNH">
+                                            CNH:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <input type="file" name="inputFileCNH" id="inputFileCNH"
+                                                    class="form-control" style="display: none" />
+                                                <button class="btn btn-primary" onclick="$('#inputFileCNH').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div class="col-md-4" id="divAnexoRG">
+                                        <label for="inputFileRG">
+                                            RG:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <input type="file" name="inputFileRG" id="inputFileRG"
+                                                    class="form-control" style="display: none" />
+                                                <button class="btn btn-primary" onclick="$('#inputFileRG').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div class="col-md-4" id="divAnexoCPF">
+                                        <label for="inputFileCPF">
+                                            CPF:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <input type="file" name="inputFileCPF" id="inputFileCPF"
+                                                    class="form-control" style="display: none" />
+                                                <button class="btn btn-primary" onclick="$('#inputFileCPF').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="divAnexoFornecedor">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Documentação do Fornecedor</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4" id="divAnexoCNPJ">
+                                        <label for="inputFileCNPJ">
+                                            CNPJ:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <button class="btn btn-primary" onclick="$('#inputFileCNPJ').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                                <input type="file" name="inputFileCNPJ" id="inputFileCNPJ"
+                                                    class="form-control" style="display: none" />
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div class="col-md-4" id="divAnexoQSA">
+                                        <label for="inputFileQSA">
+                                            QSA:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <button class="btn btn-primary" onclick="$('#inputFileQSA').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden"
+                                                    style="margin-right: 5px">Nenhum arquivo selecionado</div>
+                                                <input type="file" name="inputFileQSA" id="inputFileQSA"
+                                                    class="form-control" style="display: none" />
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                    <div class="col-md-4" id="divAnexoCertidoes">
+                                        <label for="inputFileCertidoes">
+                                            Certidões:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <button class="btn btn-primary"
+                                                    onclick="$('#inputFileCertidoes').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                                <input type="file" name="inputFileCertidoes" id="inputFileCertidoes"
+                                                    class="form-control" style="display: none" multiple />
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="divAnexoEquipamentos">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Documentação do Equipamento</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4" id="divAnexoNFRemessa">
+                                        <label for="checkboxNFRemessa">
+                                            <input type="checkbox" name="checkboxNFRemessa" id="checkboxNFRemessa" />
+                                            NF de Remessa:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline" data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Ao anexar, a NF de remessa será enviada automaticamente para o nfcc@castilho.com.br">
+                                                <button class="btn btn-primary" onclick="$('#inputFileNF').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                                <input type="file" name="inputFileNF" id="inputFileNF"
+                                                    class="form-control" style="display: none" multiple />
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="divAnexoImovel">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Documentação do Imóvel</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4" id="divAnexoTermoDeImovel">
+                                        <label for="inputFileTermoDeImovel">
+                                            Termo de Solicitação de Imóvel:
+                                            <br />
+                                            <div style="display: flex; align-items: baseline">
+                                                <button class="btn btn-primary"
+                                                    onclick="$('#inputFileTermoDeImovel').click();"
+                                                    style="margin-right: 5px">Escolher arquivo</button>
+                                                <div
+                                                    style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                                    Nenhum arquivo selecionado</div>
+                                                <input type="file" name="inputFileTermoDeImovel"
+                                                    id="inputFileTermoDeImovel" class="form-control"
+                                                    style="display: none" />
+                                            </div>
+                                        </label><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <br>
+                            <div class="col-md-4" id="divAnexoOutros">
+                                <label for="inputFileOutros">
+                                    Outros (Opcional):
+                                    <br />
+                                    <div style="display: flex; align-items: baseline">
+                                        <button class="btn btn-primary" onclick="$('#inputFileOutros').click();"
+                                            style="margin-right: 5px">Escolher arquivo</button>
+                                        <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                            Nenhum arquivo selecionado</div>
+                                        <input type="file" name="inputFileOutros" id="inputFileOutros"
+                                            class="form-control" style="display: none" multiple />
+                                    </div>
+                                </label><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabCamposRM">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="codColigada">Coligada: </label>
+                                <select id="codColigada" name="codColigada" class="form-control campoRM">
+                                    <option></option>
+                                    <option value="1">CONSTRUTORA CASTILHO</option>
+                                    <option value="2">CASTILHO MINERAÇÃO</option>
+                                    <option value="5">CONSORCIO CONSTRUTOR TUNEL ESTACAO LUZ</option>
+                                    <option value="6">CONSORCIO CASTILHO - ARTELESTE</option>
+                                    <option value="8">CONSORCIO CASTILHO - ECAM / PETROLINA</option>
+                                    <option value="10">CONSORCIO CASTILHO - GROS / PATIO SANTOS</option>
+                                </select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Filial: </label>
+                                <select id="codFilial" name="codFilial" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tipoContrato">Tipo do Contrato:</label>
+                                <select name="tipoContrato" id="tipoContrato" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="codCCusto">Centro de Custo:</label>
+                                <select name="codCCusto" id="codCCusto" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="codContrato">Código:</label>
+                                <input class="form-control campoRM" id="codContrato" name="codContrato" type="text"
+                                    mask="0.0.000-000/00" />
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Local de estoque:</label>
+                                <select id="locEstoque" name="locEstoque" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="codStaCnt">Status:</label>
+                                <select id="codStaCnt" name="codStaCnt" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="codNatureza">Natureza:</label>
+                                <select id="codNatureza" name="codNatureza" class="form-control campoRM">
+                                    <option value="1">Compra</option>
+                                    <option value="0">Venda</option>
+                                    <option value="2">Ambos</option>
+                                </select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tipoPagamento">Condição de Pagamento:</label>
+                                <select name="tipoPagamento" id="tipoPagamento" class="form-control campoRM">
+                                    <option value=""></option>
+                                    <option value="001">A VISTA</option>
+                                    <option value="130">30 DIAS</option>
+                                    <option value="145">45 DIAS</option>
+                                </select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="descContrato">Objeto do Contrato:</label>
+                                <input class="form-control campoRM" id="descContrato" name="descContrato" type="text"
+                                    placeholder="Escreva um nome para o contrato" />
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="representante">Representante:</label>
+                                <select name="representante" id="representante" class="form-control campoRM"></select>
+                                <span class="spanReadonly"></span>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="dataContratoRM">Data contrato:</label>
+                                <input type="text" name="dataContratoRM" id="dataContratoRM"
+                                    class="form-control campoRM">
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="tipoFaturamentoContratoRM">Tipo de Faturamento:</label>
+                                <select name="tipoFaturamentoContratoRM" id="tipoFaturamentoContratoRM"
+                                    class="form-control campoRM">
+                                    <option value=""></option>
+                                    <option value="0">Não Periódico</option>
+                                    <option value="1">Periódico</option>
+                                    <option value="2">Por Medição</option>
+                                </select>
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="diaFaturamentoContratoRM">Dia de Faturamento:</label>
+                                <input type="number" name="diaFaturamentoContratoRM" id="diaFaturamentoContratoRM"
+                                    class="form-control campoRM" />
+                                <br />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="QtdeFaturamentos">Qtde. de Faturamentos:</label>
+                                <input type="number" name="QtdeFaturamentos" id="QtdeFaturamentos"
+                                    class="form-control campoRM" />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="Campofornecedor">Fornecedor:</label>
+                                <div id="divCampofornecedor">
+                                    <input class="campoRM form-control" type="zoom" id="Campofornecedor"
+                                        name="Campofornecedor" data-zoom="{
+											'displayKey':'CGCCFO',
+											'datasetId':'FCFO',
+											'maximumSelectionLength':'1',
+											'filterValues': 'CODCOLIGADA,0,ATIVO,1,sqllimit,200',
+											'placeholder':'Escolha o fornecedor',
+											'fields':[{'field':'CGCCFO','label':'CPF/CNPJ','search':'true'},
+													{'field':'NOMEFANTASIA','label':'Nome', 'search':'true'},
+													{'field':'CODCFO','label':'Código','search':'true'}]}" />
+                                </div>
+                                <span id="spanForncedor" class="spanReadonly"></span>
+                                <br /><br />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Itens</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <button class="btn btn-primary" id="btnItensContratoRM">Adicionar</button>
+                                        <br /><br />
+                                        <div id="divItensContratoRM"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="panel panel-primary" id="divDecisao">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Decisão</h3>
+                </div>
+                <div class="panel-body" align="center">
+                    <div class="decisao form-group" style="margin-top: 20px; text-align: center">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label>
+                                        <input type="radio" name="decisaoCont" id="decisaoContCorreto" value="1" />
+                                        Correto
+                                    </label>
+                                </div>
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label>
+                                        <input type="radio" name="decisaoCont" id="decisaoContCorrecao"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Preencher 'Complemento' informando o que deve ser alterado"
+                                            value="2" />
+                                        Correção
+                                    </label>
+                                </div>
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label>
+                                        <input type="radio" name="decisaoCont" id="decisaoContRetornoJuridico"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Preencher 'Complemento' informando o que deve ser alterado"
+                                            value="juridico" />
+                                        Retornar Jurídico
+                                    </label>
+                                </div>
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label>
+                                        <input type="radio" name="decisaoCont" id="decisaoContRetornoControl"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Preencher 'Complemento' informando o que deve ser alterado"
+                                            value="controladoria" />
+                                        Retornar Controladoria
+                                    </label>
+                                </div>
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label>
+                                        <input type="radio" name="decisaoCont" id="decisaoContRetornoObra"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Preencher 'Complemento' informando o que deve ser alterado"
+                                            value="obra" />
+                                        Retornar Obra
+                                    </label>
+                                </div>
+                                <div style="margin-left: 10px; margin-right: 10px; display: inline-flex">
+                                    <label class="op3">
+                                        <input type="radio" name="decisaoCont" id="decisaoContEncerramento" value="3" />
+                                        Encerramento
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="contolAnexaContrato">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <div style="text-align: left">
+                                <label for="inputFileContrato">
+                                    Insira o contrato:
+                                    <br />
+                                    <div style="display: flex; align-items: baseline">
+                                        <input type="file" name="inputFileContrato" id="inputFileContrato"
+                                            class="form-control" style="display: none" />
+                                        <button class="btn btn-primary" onclick="$('#inputFileContrato').click();"
+                                            style="margin-right: 5px">Escolher arquivo</button>
+                                        <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                                            Nenhum arquivo selecionado</div>
+                                    </div>
+                                </label>
+                                <br /><br />
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <button class="btn btn-success" id="btnEnviar">Enviar</button>
+                </div>
+            </div>
+            <div id="divWord" class="googoose-wrapper" style="text-align: justify;">
+            </div>
+
+            <div id="divDownloadModelos">
+            
+            </div>
+
+
+            <div style="display: none">
+                <input type="hidden" name="countBeforeTaskSave" id="countBeforeTaskSave" />
+                <input type="hidden" name="formMode" id="formMode" />
+                <input type="hidden" name="isMobile" id="isMobile" />
+                <input type="hidden" name="atividade" id="atividade" />
+                <input type="hidden" name="numProcess" id="numProcess" />
+                <input type="hidden" name="servidor" id="servidor" />
+                <input type="hidden" name="solicitante" id="solicitante" />
+                <input type="hidden" name="userCode" id="userCode" />
+                <input type="hidden" name="coordenador" id="coordenador" />
+                <input type="hidden" name="engenheiro" id="engenheiro" />
+
+                <input type="hidden" name="hiddenCodColigada" id="hiddenCodColigada" />
+                <input type="hidden" name="hiddenObra" id="hiddenObra" />
+                <input type="hidden" name="hiddenCODGCCUSTO" id="hiddenCODGCCUSTO" />
+                <input type="hidden" name="coligada" id="coligada" />
+                <input type="hidden" name="CodigoContrato" id="CodigoContrato" />
+                <input type="hidden" name="Fornecedor" id="Fornecedor" />
+                <input type="hidden" name="FornecedorCNPJ" id="FornecedorCNPJ" />
+                <input type="hidden" name="codFornecedor" id="codFornecedor">
+                <input type="hidden" name="valorCamposContrato" id="valorCamposContrato" />
+                <input type="hidden" name="dataContrato" id="dataContrato" />
+                <input type="hidden" name="dataContratoFim" id="dataContratoFim" />
+                <input type="hidden" name="idCntRm" id="idCntRm" />
+
+                <input type="hidden" name="JSONItemContratoRM" id="JSONItemContratoRM" />
+                <input type="hidden" name="JSONContratoPrincipal" id="JSONContratoPrincipal">
+
+                <input type="hidden" name="equipamentosSel" id="equipamentosSel" />
+                <input type="hidden" name="equipamentosPreenchidos" id="equipamentosPreenchidos">
+                <input type="hidden" name="equipamentosRemover" id="equipamentosRemover">
+
+                <input type="hidden" name="alteracoesEquipamentos" id="alteracoesEquipamentos">
+                <input type="hidden" name="isContratoSave" id="isContratoSave" value="0" />
+                <input type="hidden" name="SalvaHtmlContrato" id="SalvaHtmlContrato" />
+                <input type="hidden" name="idModeloContrato" id="idModeloContrato">
+                <input type="hidden" name="GerOper" id="GerOper" />
+                <input type="hidden" name="tpCont" id="tpCont" />
+                <input type="hidden" name="jsonAssinaturaEletronica" id="jsonAssinaturaEletronica" />
+                <input type="hidden" name="modeloContrato" id="modeloContrato" />
+
+                <input type="hidden" name="dataEnvio" id="dataEnvio" />
+                <input type="hidden" name="horaEnvio" id="horaEnvio" />
+
+                <input type="hidden" name="idDocContrato" id="idDocContrato" />
+                <input type="hidden" name="idDocCNPJ" id="idDocCNPJ" />
+                <input type="hidden" name="idDocQSA" id="idDocQSA" />
+                <input type="hidden" name="idDocNF" id="idDocNF" />
+                <input type="hidden" name="idDocCPF" id="idDocCPF" />
+                <input type="hidden" name="idDocRG" id="idDocRG" />
+                <input type="hidden" name="idDocCNH" id="idDocCNH" />
+                <input type="hidden" name="idDocCertidoes" id="idDocCertidoes" />
+                <input type="hidden" name="idDocTermoDeImovel" id="idDocTermoDeImovel" />
+                <input type="hidden" name="idDocOutros" id="idDocOutros" />
+            </div>
+            <input type="hidden" name="hidden" id="hidden" />
+            <div id="my_mm" style="height: 100mm; display: none"></div>
+            <script>
+                var beforeSendValidate = function (numState, nextState) {
+                    var validacao = ValidaAntesDeEnviar();
+
+                    if (validacao != true) {
+                        throw validacao;
+                    }
+                };
+            </script>
+        </form>
+    </div>
+    <script src="FuncoesAssinaturaEletronica.js"></script>
+    <script src="FuncoesModelosDeContrato.js"></script>
+    <script type="text/javascript" src="Script.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Funcoes.js"></script>
+</body>
+
+</html>

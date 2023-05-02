@@ -1,0 +1,227 @@
+.tab{ 
+    border: black 1px solid !important;
+    border-radius: 4px 4px 0 0 !important;
+}
+
+input[type="radio"] {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.fluig-style-guide .switch.switch-labels .switch-input:checked+.switch-button:before {
+    content: "SIM" !important;
+}
+
+.fluig-style-guide .switch.switch-labels .switch-button:before {
+    content: "NÂO" !important;
+}
+
+.fluig-style-guide .nav-tabs.nav-justified>li.in>a {
+    background-color: #58595b;
+    color: #fff;
+}
+
+.tableTh{
+    text-align: center !important; 
+    border: solid black 1px !important; 
+    color: black !important;
+    font-size: 16px !important;  
+    line-height: 22px !important; 
+    padding: 1mm 1mm 1mm 1mm !important; 
+    min-width: 22mm !important;
+}
+
+.tableTd{
+    border: solid black 1px !important; 
+    color: black !important;
+    padding: 1mm 1mm 1mm 1mm !important; 
+}
+
+.htmlContrato{
+    width: 210mm;
+    font-family: Arial; 
+    font-weight: 12; 
+    text-align: justify;
+    color: black;
+}
+
+.verticalPositioningDiv {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#hide {
+    display: none;
+    white-space: pre;
+}
+
+body,
+#txt,
+#hide {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.divCampoContrato {
+    display: contents;
+}
+
+.campoTabelaEquipamentos{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.has-error{
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    display: inline-block;
+    border: 1px red solid !important;
+    color: black !important;
+}
+.campoContrato.has-error{
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    display: inline-block;
+    border: 1px red solid !important;
+    color: black !important;
+}
+.campoContrato{
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    display: inline-block;
+    border: 1px black solid !important;
+    color: black !important;
+}
+
+.divCampoContrato span {
+    display: contents;
+}
+
+input:read-only, select:read-only  {
+    color: black !important;
+    font-weight: 400 !important;
+}
+
+.trBlack>td{
+    color: black !important;
+}
+
+.spanReadonly{
+    border: rgb(209, 211, 212) solid 1px;
+    background-color: rgb(242, 242, 242);
+    border-radius: 4px;
+    padding: 6px 12px;
+    color: black;
+    box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px 0px inset;
+    outline-color: rgb(0, 0, 0);
+    width: 100%;
+    display: block;
+}
+
+.fluig-style-guide .nav > li.active > a.btn-castilho:hover, .fluig-style-guide .nav > li.active > a.btn-castilho:focus, .fluig-style-guide .nav > li.active > a.btn-castilho {
+        background-color: rgb(251, 205, 37);
+        border: black solid 1px;
+        color: black;
+        font-weight: 600;
+}
+
+.fluig-style-guide .nav > li:not(.active) > a.btn-castilho {
+    background-color: rgb(251, 205, 37);
+    border: black solid 1px;
+    color: black;
+    font-weight: 600;
+}
+
+#pdf-exemplo {
+    border: 1px solid black;
+}
+/*
+@media screen and (max-width: 600px) {
+	table {
+		border: 0;
+	}
+	table caption {
+		font-size: 1.3em;
+	}
+	table thead {
+		border: none;
+		clip: rect(0 0 0 0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+	table tr {
+		border-bottom: 3px solid #ddd;
+		display: block;
+		margin-bottom: .625em;
+	}
+	table td {
+		border-bottom: 1px solid #ddd;
+		display: block;
+		font-size: .8em;
+		text-align: right;
+	}
+	table td::before {
+	
+		content: attr(data-label);
+		float: left;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+	table td:last-child {
+		border-bottom: 0;
+	}
+
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(1):before { content: "Prefixo"; }
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(2):before { content: "Modelo"; }
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(3):before { content: "Descrição"; }
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(4):before { content: "Placa/Serie"; }
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(5):before { content: "Fabricante"; }
+	#tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(6):before { content: "Fornecedor"; }
+    #tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(7):before { content: "Valor Equipamento"; }
+    #tableEquipamentosListaEquipamentos>tbody>tr>td:nth-of-type(8):before { content: "Valor Locação"; }
+
+
+    
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(1):before { content: "Prefixo"; }
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(2):before { content: "Equipamento"; }
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(3):before { content: "Marca"; }
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(4):before { content: "Modelo"; }
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(5):before { content: "Ano"; }
+	#tabelaEquipamentos>tbody>tr>td:nth-of-type(6):before { content: "Placa/Serie"; }
+    #tabelaEquipamentos>tbody>tr>td:nth-of-type(7):before { content: attr(data-before); }
+}*/
+
+#tableEquipamentos>tbody>tr.odd, #tableEquipamentos>tbody>tr.even{
+    background-color: #f5f5f5;
+}
+
+.fluig-style-guide .panel.panel-default>.panel-body, .fluig-style-guide .panel.panel-default>.panel-footer, .fluig-style-guide .panel.panel-default>.panel-heading {
+    border: solid lightgray 1px !important;
+}
+
+.fluig-style-guide .panel.panel-default {
+    border: 1px black solid !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
