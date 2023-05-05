@@ -129,7 +129,7 @@ function AnexaDocumentosInicio() {
     }
     if (hAPI.getCardValue("idDocRG") != "" && hAPI.getCardValue("idDocRG") != null) {
         AnexarDocumento(hAPI.getCardValue("idDocRG"));
-    }  
+    }
     if (hAPI.getCardValue("idDocCNH") != "" && hAPI.getCardValue("idDocCNH") != null) {
         AnexarDocumento(hAPI.getCardValue("idDocCNH"));
     }
@@ -149,34 +149,34 @@ function AnexaDocumentosInicio() {
         }
     }
 
-/*
-
-    if (atividade == 0 || atividade == 1 || atividade == 7) {
-        var idContrato = hAPI.getCardValue("idModeloContrato");
-
-        if (idContrato == 1 || idContrato == 3 || idContrato == 4 || idContrato == 5 || idContrato == 11 || idContrato == 12 || idContrato == 13 || idContrato == 14 || idContrato == 15 || idContrato == 16 || idContrato == 17 || idContrato == 18) {
-            AnexarDocumento(hAPI.getCardValue("idDocCNPJ"));
-            AnexarDocumento(hAPI.getCardValue("idDocQSA"));
-        }
-
-        if (idContrato == 1 || idContrato == 2 || idContrato == 4 || idContrato == 5 || idContrato == 11 || idContrato == 12 || idContrato == 13 || idContrato == 14 || idContrato == 15 || idContrato == 16 || idContrato == 17 || idContrato == 18) {
-            var DocsAdministrador = hAPI.getCardValue("DocsAdministrador");
-            if (DocsAdministrador == "RG e CPF") {
-                AnexarDocumento(hAPI.getCardValue("idDocCPF"));
-                AnexarDocumento(hAPI.getCardValue("idDocRG"));
-            } else if (DocsAdministrador == "CNH") {
-                AnexarDocumento(hAPI.getCardValue("idDocCNH"));
+    /*
+    
+        if (atividade == 0 || atividade == 1 || atividade == 7) {
+            var idContrato = hAPI.getCardValue("idModeloContrato");
+    
+            if (idContrato == 1 || idContrato == 3 || idContrato == 4 || idContrato == 5 || idContrato == 11 || idContrato == 12 || idContrato == 13 || idContrato == 14 || idContrato == 15 || idContrato == 16 || idContrato == 17 || idContrato == 18) {
+                AnexarDocumento(hAPI.getCardValue("idDocCNPJ"));
+                AnexarDocumento(hAPI.getCardValue("idDocQSA"));
             }
-        }
-
-        var outros = hAPI.getCardValue("idDocOutros");
-        if (outros != null && outros != "") {
-            outros = outros.split(",");
-            for (var i = 0; i < outros.length; i++) {
-                AnexarDocumento(outros[i]);
+    
+            if (idContrato == 1 || idContrato == 2 || idContrato == 4 || idContrato == 5 || idContrato == 11 || idContrato == 12 || idContrato == 13 || idContrato == 14 || idContrato == 15 || idContrato == 16 || idContrato == 17 || idContrato == 18) {
+                var DocsAdministrador = hAPI.getCardValue("DocsAdministrador");
+                if (DocsAdministrador == "RG e CPF") {
+                    AnexarDocumento(hAPI.getCardValue("idDocCPF"));
+                    AnexarDocumento(hAPI.getCardValue("idDocRG"));
+                } else if (DocsAdministrador == "CNH") {
+                    AnexarDocumento(hAPI.getCardValue("idDocCNH"));
+                }
             }
-        }
-    }*/
+    
+            var outros = hAPI.getCardValue("idDocOutros");
+            if (outros != null && outros != "") {
+                outros = outros.split(",");
+                for (var i = 0; i < outros.length; i++) {
+                    AnexarDocumento(outros[i]);
+                }
+            }
+        }*/
 }
 
 function CriaAssinaturaEletronica() {
@@ -185,13 +185,12 @@ function CriaAssinaturaEletronica() {
         for (var i = 0; i < docs.size(); i++) {
             var doc = docs.get(i);
             if (doc.getDocumentId() == hAPI.getCardValue("idDocContrato")) {
-                var horario2 = hAPI.getCardValue("horaEnvio");
-                var hoje = hAPI.getCardValue("dataEnvio");
+
 
                 var arrSigners = JSON.parse(hAPI.getCardValue("jsonAssinaturaEletronica"));
-                var diretor = hAPI.getCardValue("selectAssinanteCastilho");
-                var c1 = DatasetFactory.createConstraint("nome", diretor, diretor, ConstraintType.MUST);
-                var ds = DatasetFactory.getDataset("ds_vertsign_assinantes", null, [c1], null);
+                var ds = DatasetFactory.getDataset("ds_vertsign_assinantes", null, [
+                    DatasetFactory.createConstraint("nome", hAPI.getCardValue("selectAssinanteCastilho"), hAPI.getCardValue("selectAssinanteCastilho"), ConstraintType.MUST)
+                ], null);
                 arrSigners.push({
                     nome: ds.getValue(0, "nome"),
                     email: ds.getValue(0, "email"),
@@ -199,81 +198,32 @@ function CriaAssinaturaEletronica() {
                     tipo: "E",
                     status: "Pendente",
                 });
-                var cState = 217;
-                var idAnexo = doc.getDocumentId();
-                var vrAnexo = doc.getVersion();
-                var dsAnexo = doc.getDocumentDescription();
 
-                var nmArquivo = {
-                    name: "nmArquivo",
-                    value: dsAnexo,
-                };
-                var codArquivo = {
-                    name: "codArquivo",
-                    value: idAnexo,
-                };
-                var vrArquivo = {
-                    name: "vrArquivo",
-                    value: vrAnexo,
-                };
-                var codPasta = {
-                    name: "codPasta",
-                    value: 140518, //Prod
-                    //value: 12790, //Homolog
-                };
-                var codRemetente = {
-                    name: "codRemetente",
-                    value: hAPI.getCardValue("solicitante"),
-                };
-                var contraint = DatasetFactory.createConstraint("colleagueId", hAPI.getCardValue("solicitante"), hAPI.getCardValue("solicitante"), ConstraintType.MUST);
-                var dataset = DatasetFactory.getDataset("colleague", null, [contraint], null);
-                var nmRemetente = {
-                    name: "nmRemetente",
-                    value: dataset.getValue(0, "colleagueName"),
-                };
-                var emails = {
-                    name: "jsonSigners",
-                    value: JSONUtil.toJSON(arrSigners),
-                };
-                var formDescription = {
-                    name: "formDescription",
-                    value: dsAnexo,
-                };
-                var status = {
-                    name: "status",
-                    value: "Enviando para assinatura",
-                };
-                var metodo = {
-                    name: "metodo",
-                    value: "create",
-                };
-                var dataEnvio = {
-                    name: "dataEnvio",
-                    value: hoje,
-                };
-                var horaEnvio = {
-                    name: "horaEnvio",
-                    value: horario2,
-                };
-                var numSolic = {
-                    name: "numSolic",
-                    value: getValue("WKNumProces"),
-                };
-                var choosedState = {
-                    name: "choosedState",
-                    value: cState,
-                };
+                var IdArquivo = doc.getDocumentId();
+                var versaoArquivo = doc.getVersion();
+                var NomeArquivo = doc.getDocumentDescription();
+                var CodRemetente = hAPi.getCardValue("solicitante");
+                
+                var ds = DatasetFactory.getDataset("ds_auxiliar_wesign", null, [
+                    DatasetFactory.createConstraint("nmArquivo", NomeArquivo, NomeArquivo, ConstraintType.MUST),
+                    DatasetFactory.createConstraint("codArquivo", IdArquivo, IdArquivo, ConstraintType.MUST),
+                    DatasetFactory.createConstraint("vrArquivo", versaoArquivo, versaoArquivo, ConstraintType.MUST),
+                    DatasetFactory.createConstraint("codPasta", "140518", "140518", ConstraintType.MUST),
+                    DatasetFactory.createConstraint("codRemetente", CodRemetente, CodRemetente, ConstraintType.MUST),
+                    DatasetFactory.createConstraint("nmRemetente", BuscaNomeUsuario(CodRemetente), BuscaNomeUsuario(CodRemetente), ConstraintType.MUST),
+                    DatasetFactory.createConstraint("status", "Enviando para assinatura", "Enviando para assinatura", ConstraintType.MUST),
+                    DatasetFactory.createConstraint("metodo", "create", "create", ConstraintType.MUST),
+                    DatasetFactory.createConstraint("jsonSigners", JSONUtil.toJSON(arrSigners), JSONUtil.toJSON(arrSigners), ConstraintType.MUST),
+                    DatasetFactory.createConstraint("numSolic", getValue("WKNumProces"), getValue("WKNumProces"), ConstraintType.MUST)
+                ], null);
 
-                var constraints = [nmArquivo, codArquivo, vrArquivo, codPasta, codRemetente, nmRemetente, emails, formDescription, status, metodo, dataEnvio, horaEnvio, numSolic, choosedState];
-
-                var listConstraints = [];
-                for (var j = 0; j < constraints.length; j++) {
-                    listConstraints.push(DatasetFactory.createConstraint(constraints[j].name, constraints[j].value, constraints[j].value, ConstraintType.MUST));
+                if (ds.getValue(0, "Result") == "OK") {
+                    return true;
                 }
-                var dsAux = DatasetFactory.getDataset("ds_auxiliar_vertsign", null, listConstraints, null);
-
-                if (dsAux.getValue(0, "Result") === "OK") {
-                    callback();
+                else {
+                    log.error(ds.getValue("Erro ao enviar Assinatura Eletronica"));
+                    log.error(ds.getValue(0, "mensagem"));
+                    throw "Erro ao Criar a Assinatura Eletrôncia!";
                 }
             }
         }
@@ -309,7 +259,7 @@ function atualizaStatusEquipParaEmAndamento() {
             if (ds.values[1][0] != "com.microsoft.sqlserver.jdbc.SQLServerException: A instrução não retornou um conjunto de resultados.") {
                 log.info("Erro: " + ds.values[1][0]);
                 log.info("Query: " + ds.values[1][0]);
-    
+
                 throw "Erro ao alterar o status do equipamento: " + ds.values[1][0];
             }
         }
@@ -325,11 +275,11 @@ function atualizaStatusEquipParaEmVigencia() {
             var c1 = DatasetFactory.createConstraint("OPERACAO", "STATUSPARAVIGENCIA", "STATUSPARAVIGENCIA", ConstraintType.MUST);
             var c2 = DatasetFactory.createConstraint("JSONEQUIPAMENTO", JSON.stringify(json[i]), JSON.stringify(json[i]), ConstraintType.MUST);
             var ds = DatasetFactory.getDataset("CadastroDeEquipamentos", null, [c1, c2], null);
-    
+
             if (ds.values[1][0] != "com.microsoft.sqlserver.jdbc.SQLServerException: A instrução não retornou um conjunto de resultados.") {
                 log.info("Erro: " + ds.values[1][0]);
                 log.info("Query: " + ds.values[2][0]);
-    
+
                 throw "Erro ao alterar o status do equipamento: " + ds.values[1][0];
             }
         }
@@ -365,7 +315,7 @@ function enviarEmailContabilidade() {
 
 
         var htmlEmail =
-        "<h3>Contrato</h3>\
+            "<h3>Contrato</h3>\
         <b>Tipo de Contrato: </b><span>" + hAPI.getCardValue("modeloContrato") + "</span><br>\
         <b>Fornecedor: </b><span>" + fornecedor.getValue(0, "NOMEFANTASIA") + "</span><br>\
         <b>Origem/Fornecedor: </b><span>" + fornecedor.getValue(0, "CIDADE") + " - " + fornecedor.getValue(0, "CODETD") + "</span><br>\
@@ -384,10 +334,10 @@ function enviarEmailContabilidade() {
 
         var equipamentosSel = hAPI.getCardValue("equipamentosSel");
         if (equipamentosSel != "" && equipamentosSel != null) {
-          equipamentosSel = JSON.parse(equipamentosSel);
-          for (var i = 0; i < equipamentosSel.length; i++) {
-            htmlEmail +=
-                "<div>\
+            equipamentosSel = JSON.parse(equipamentosSel);
+            for (var i = 0; i < equipamentosSel.length; i++) {
+                htmlEmail +=
+                    "<div>\
                 <b>Prefixo: </b><span>" + equipamentosSel[i].PREFIXO + "</span>\
                 <br>\
                 <b>Fabricante: </b><span>" + equipamentosSel[i].FABRICANTE + "</span>\
@@ -399,12 +349,12 @@ function enviarEmailContabilidade() {
                 <b>Valor: </b><span>" + FormataMoeda(equipamentosSel[i].VALOR.split(".").join("").replace(",", ".")) + "</span>\
                 <br><br>\
             </div>";
-        }
+            }
 
         }
 
         var equipamentosPreenchidos = hAPI.getCardValue("equipamentosPreenchidos");
-        if (equipamentosPreenchidos!= "" && equipamentosPreenchidos!= null) {
+        if (equipamentosPreenchidos != "" && equipamentosPreenchidos != null) {
             equipamentosPreenchidos = JSON.parse(equipamentosPreenchidos);
             //log.info(equipamentosPreenchidos[0].VALUES.find(eqp => eqp.Chave == "Prefixo").Valor);
             for (var i = 0; i < equipamentosPreenchidos.length; i++) {
@@ -578,10 +528,10 @@ function exportarContratoProRM() {
 				    <DATAFIM>" + CalculaDataFimContrato() + "T00:00:00</DATAFIM>\
 				    <CODMOEVALORCONTRATO>R$</CODMOEVALORCONTRATO>\
 				    <IMPRIMEMOV>1</IMPRIMEMOV>";
-                    xml += (diaFaturamento == "" || diaFaturamento == 0 ? "<DIAFATURAMENTO>0</DIAFATURAMENTO>" : "<DIAFATURAMENTO>" + diaFaturamento + "</DIAFATURAMENTO>")
-                    xml += "<CODUSUARIO>" + getValue("WKUser") + "</CODUSUARIO>";
-                    xml += (QtdeFaturamentos == "" || QtdeFaturamentos == 0 ? "<QTDEFATURAMENTOS>1</QTDEFATURAMENTOS>" : "<QTDEFATURAMENTOS>" + QtdeFaturamentos + "</QTDEFATURAMENTOS>")
-                xml += "</TCnt>\
+        xml += (diaFaturamento == "" || diaFaturamento == 0 ? "<DIAFATURAMENTO>0</DIAFATURAMENTO>" : "<DIAFATURAMENTO>" + diaFaturamento + "</DIAFATURAMENTO>")
+        xml += "<CODUSUARIO>" + getValue("WKUser") + "</CODUSUARIO>";
+        xml += (QtdeFaturamentos == "" || QtdeFaturamentos == 0 ? "<QTDEFATURAMENTOS>1</QTDEFATURAMENTOS>" : "<QTDEFATURAMENTOS>" + QtdeFaturamentos + "</QTDEFATURAMENTOS>")
+        xml += "</TCnt>\
 			    <TCNTHISTORICO>\
 			    	<CODCOLIGADA>" + coligada + "</CODCOLIGADA>\
 			    	<IDCNT>" + idCnt + "</IDCNT>\
@@ -770,7 +720,7 @@ function FormataMoeda(valor) {
 function EnviaEmailAlteracaoNoEquipamento() {
     var json = hAPI.getCardValue("alteracoesEquipamentos");
     if (json != "" && json != null) {
-        json = JSON.parse(json); 
+        json = JSON.parse(json);
     }
     var mensagem = "Dados do equipamento alterados no contrato!";
 
@@ -825,14 +775,14 @@ function BuscaEmailUsuario(usuario) {
     return ds.getValue(0, "mail");
 }
 
-function AtualizaStatusContrato(CODSTACNT){
+function AtualizaStatusContrato(CODSTACNT) {
     var JSONContratoPrincipal = hAPI.getCardValue("JSONContratoPrincipal");
 
     if (JSONContratoPrincipal != "") {
-        JSONContratoPrincipal= JSON.parse(JSONContratoPrincipal);
+        JSONContratoPrincipal = JSON.parse(JSONContratoPrincipal);
 
         var xml =
-        "<CtrCnt>\
+            "<CtrCnt>\
             <TCnt>\
                 <CODCOLIGADA>" + JSONContratoPrincipal.CODCOLIGADA + "</CODCOLIGADA>\
                 <IDCNT>" + JSONContratoPrincipal.IDCNT + "</IDCNT>\
@@ -860,9 +810,17 @@ function AtualizaStatusContrato(CODSTACNT){
             }
         }
     }
-    else{
+    else {
         throw "Contrato não encontrado para alteração no STATUS.";
     }
+}
+
+function BuscaNomeUsuario(CodUsuario) {
+    var ds = DatasetFactory.getDataset("colleague", ["colleagueName"], [
+        DatasetFactory.createConstraint("colleagueId", CodUsuario, CodUsuario, ConstraintType.MUST)
+    ], null);
+
+    return ds.getValue(0, "colleagueName");
 }
 
 /*  XML Inserção Contrato - RM

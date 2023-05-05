@@ -507,7 +507,7 @@ $(document).ready(function () {
                     var nome = json[i].nome;
                     var email = json[i].email;
                     var cpf = json[i].cpf;
-                    incluiAssinante(nome + "|" + email + "|" + cpf);
+                    InsereCardDeAssinanteNoPainelDeAssinantes(nome + " | " + email + " | " + cpf, "divListAssinantes");
                 }
 
                 $("#divListAssinantes").find("button").remove();

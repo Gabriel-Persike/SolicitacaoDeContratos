@@ -486,7 +486,7 @@
                                             <select name="selectAssinanteCastilho" id="selectAssinanteCastilho"
                                                 class="form-control" onchange="ValidaTerminoTabAssinatura()">
                                                 <option value=""></option>
-                                                <option value="Augusto Lyra">Augusto Lyra</option>
+                                                <option value="Augusto Cesar de Almeida Pereira de Lyra">Augusto Cesar de Almeida Pereira de Lyra</option>
                                                 <option value="Emanuel Mascarenhas Padilha Junior">Emanuel Mascarenhas
                                                     Padilha Junior</option>
                                                 <option value="Jerson Godoy Leski Junior">Jerson Godoy Leski Junior
@@ -507,7 +507,7 @@
                                             <input type="text" class="form-control" id="selectParteAssinatura"
                                                 name="selectParteAssinatura" />
                                             <button class="btn btn-success"
-                                                onclick='incluiAssinante($("#selectParteAssinatura").val()); $("#selectParteAssinatura").val(""); ValidaTerminoTabAssinatura();'
+                                                onclick='InsereCardDeAssinanteNoPainelDeAssinantes($("#selectParteAssinatura").val(), "divListAssinantes"); $("#selectParteAssinatura").val(""); ValidaTerminoTabAssinatura();'
                                                 style="vertical-align: top">Incluir assinante</button>
                                             <button onclick="ModalNovoAssinante();" style="vertical-align: top"
                                                 class="btn btn-primary btnNovoCad">Cadastrar Novo</button>
@@ -529,7 +529,6 @@
                                         <thead>
                                             <tr>
                                                 <th>Nome</th>
-                                                <th>Verificar</th>
                                                 <th>Assinantes</th>
                                                 <th>Data de envio</th>
                                                 <th>Horário de envio</th>
